@@ -5,21 +5,23 @@ Unidades::Unidades()
     n_unidades=0;
     contador_RetornaUnidades=0;
     velocidade_soldado=2;
-    velocidade_arqueiro=1; 
+    velocidade_arqueiro=1;
     velocidade_cavaleiro=5;
     velocidade_coletor=3;
     vida_quartel=40;
     vida_estabulo=50;
     vida_campo_de_arco=50;
     vida_escavadeira=80;
-    vida_base=100;
+    vida_base=100;    
+    srand((unsigned)time(NULL));
+
 }
 
 Unidades::~Unidades()
 {
 }
 
-bool Unidades::CriaUnidade(int x, int y, tipo_unidade tipo)
+bool Unidades::CriaUnidade(int x, int y, int tipo)
 {
     for (int i = 0; i < unidades_tipos.size(); i++)
     {
@@ -77,9 +79,12 @@ bool Unidades::DestroiUnidade(int x, int y)
     return false;
 }
 
-bool Unidades::RetornaUnidades(int *x, int *y, tipo_unidade *tipo)
+bool Unidades::RetornaUnidades(int *x, int *y, int *tipo)
 {
-    if(n_unidades >= contador_RetornaUnidades)
+    if(n_unidades==0)
+        return false;
+
+    if(n_unidades > contador_RetornaUnidades)
     {
         *x = unidades_x[contador_RetornaUnidades];
         *y = unidades_y[contador_RetornaUnidades];
@@ -92,7 +97,8 @@ bool Unidades::RetornaUnidades(int *x, int *y, tipo_unidade *tipo)
 
 bool Unidades::RetornaUnidades(int *x, int *y)
 {
-    if(n_unidades==0)return false;
+    if(n_unidades==0)
+        return false;
 
     if(n_unidades > contador_RetornaUnidades)
     {
@@ -106,10 +112,79 @@ bool Unidades::RetornaUnidades(int *x, int *y)
 
 void Unidades::AtualizaUniadades()
 {
-    //Aqui vai ta toda logica do jogo 
+    //Aqui vai ta toda logica do jogo
+
     for (int i = 0; i < n_unidades; i++)
     {
-        unidades_x[i]++;
+        int distancia=2000, temp_distancia, temp_indice;
+        if(unidades_tipos[i] == 1 || unidades_tipos[i] == -1)
+        {
+            for (int j = 0; j < n_unidades; j++)
+            {
+                if((i != j) && ((unidades_tipos[i]>0 && unidades_tipos[j]<0)||(unidades_tipos[i]<0 && unidades_tipos[j]>0)))
+                {
+                    temp_distancia = unidades_x[i] + unidades_y[i] - unidades_x[j] - unidades_y[j];
+                    if(temp_distancia<0)
+                    {
+                        temp_distancia = temp_distancia * (-1);
+                    }
+                    if(temp_distancia < distancia)
+                    {
+                        distancia = temp_distancia;
+                        temp_indice = j;
+                    }
+                }
+            }
+
+            if(distancia != 2000)
+            {
+                //colocar comportamento para quando a unidade estiver no mesmo eixo, provavelmente incremento ou decremento aleatorio
+                if(unidades_x[i]<unidades_x[temp_indice])
+                {
+                    unidades_x[i]++;
+                }
+
+                if(unidades_x[i]>unidades_x[temp_indice])
+                {
+                    unidades_x[i]--;
+                }
+
+                if(unidades_x[i]==unidades_x[temp_indice])
+                {
+                    unidades_x[i]+= ((int) rand()%3)-1;
+                }
+
+                if(unidades_y[i]<unidades_y[temp_indice])
+                {
+                    unidades_y[i]++;
+                }
+
+                if(unidades_y[i]>unidades_y[temp_indice])
+                {
+                    unidades_y[i]--;
+                }
+
+                if(unidades_y[i]==unidades_y[temp_indice])
+                {
+                    unidades_y[i]+= ((int) rand()%3)-1;
+                }
+            }
+        }
+
+        if(unidades_tipos[i]==2)
+        {
+
+        }
+
+        if(unidades_tipos[i]==3)
+        {
+
+        }
+
+        if(unidades_tipos[i]==4)
+        {
+
+        }
     }
 }
 
@@ -128,6 +203,7 @@ State::State(SDL_Window *window, SDL_Renderer *renderer, int width, int height)
     y = 0;
     mouse_x = 0;
     mouse_y = 0;
+    temp_flag = 1;
 }
 
 State::~State()
@@ -181,10 +257,44 @@ void State::Input()
             case SDLK_RIGHT:
                 events_list.push_back(RIGHT);
                 break;
+
+            case SDLK_1:
+                events_list.push_back(NUM_1);
+                break;
+
+            case SDLK_2:
+                events_list.push_back(NUM_2);
+                break;
+
+            case SDLK_3:
+                events_list.push_back(NUM_3);
+                break;
+
+            case SDLK_4:
+                events_list.push_back(NUM_4);
+                break;
+
+            case SDLK_5:
+                events_list.push_back(NUM_5);
+                break;
+
+            case SDLK_6:
+                events_list.push_back(NUM_6);
+                break;
+
+            case SDLK_7:
+                events_list.push_back(NUM_7);
+                break;
+
+            case SDLK_8:
+                events_list.push_back(NUM_8);
+                break;
+
+            case SDLK_9:
+                events_list.push_back(NUM_9);
+                break;
             }
             break;
-
-
         }
     }
 }
@@ -205,23 +315,63 @@ void State::Update()
             break;
 
         case UP:
-            y-= game_speed;
+            temp_flag = -1;
             break;
 
         case DOWN:
-            y+= game_speed;
+            temp_flag = 1;
             break;
 
         case LEFT:
-            x-= game_speed;
+
             break;
 
         case RIGHT:
-            x+= game_speed;
+
+            break;
+
+        case RIGHT_CLICK:
+
             break;
 
         case LEFT_CLICK:
-            unidades.CriaUnidade(mouse_x,mouse_y);
+
+            break;
+
+        case NUM_1:
+            unidades.CriaUnidade(mouse_x,mouse_y,1 * temp_flag);
+            break;
+
+        case NUM_2:
+            unidades.CriaUnidade(mouse_x,mouse_y,2 * temp_flag);
+            break;
+
+        case NUM_3:
+            unidades.CriaUnidade(mouse_x,mouse_y,3 * temp_flag);
+            break;
+
+        case NUM_4:
+            unidades.CriaUnidade(mouse_x,mouse_y,4 * temp_flag);
+            break;
+
+        case NUM_5:
+            unidades.CriaUnidade(mouse_x,mouse_y,5 * temp_flag);
+            break;
+
+        case NUM_6:
+            unidades.CriaUnidade(mouse_x,mouse_y,6 * temp_flag);
+            break;
+
+        case NUM_7:
+            unidades.CriaUnidade(mouse_x,mouse_y,7 * temp_flag);
+            break;
+
+        case NUM_8:
+            unidades.CriaUnidade(mouse_x,mouse_y,8 * temp_flag);
+            break;
+
+        case NUM_9:
+            unidades.CriaUnidade(mouse_x,mouse_y,9 * temp_flag);
             break;
 
         }
@@ -230,7 +380,7 @@ void State::Update()
 
 void State::Render()
 {
-    int temp_x, temp_y;
+    int temp_x, temp_y, temp_tipo;
     SDL_SetRenderDrawColor(renderer,255,0,255,255);
     SDL_RenderClear(renderer);
     SDL_Rect retangulo;
@@ -238,21 +388,107 @@ void State::Render()
     retangulo.w = 10;
     retangulo.h = 10;
 
-
-
-    
-    while(unidades.RetornaUnidades(&temp_x, &temp_y))
+    while(unidades.RetornaUnidades(&temp_x, &temp_y, &temp_tipo))
     {
-        SDL_SetRenderDrawColor(renderer,0,255,0,255);
-        retangulo.x = temp_x;
-        retangulo.y = temp_y;
-        SDL_RenderFillRect(renderer,&retangulo);   
+        if(temp_tipo > 0)
+        {
+            SDL_SetRenderDrawColor(renderer,0,0,0,255);
+        }
+        else
+        {
+            SDL_SetRenderDrawColor(renderer,255,255,255,255);
+        }
+
+        if(temp_tipo == 1 || temp_tipo == -1)
+        {
+            retangulo.w = 5;
+            retangulo.h = 5;
+            retangulo.x = temp_x;
+            retangulo.y = temp_y;
+            SDL_RenderFillRect(renderer,&retangulo);
+        }
+
+        if(temp_tipo == 2 || temp_tipo == -2)
+        {
+            retangulo.w = 5;
+            retangulo.h = 10;
+            retangulo.x = temp_x;
+            retangulo.y = temp_y;
+            SDL_RenderFillRect(renderer,&retangulo);
+
+        }
+
+        if(temp_tipo == 3 || temp_tipo == -3)
+        {
+            retangulo.w = 4;
+            retangulo.h = 10;
+
+            retangulo.x = temp_x + 3;
+            retangulo.y = temp_y;
+            SDL_RenderFillRect(renderer,&retangulo);
+
+            retangulo.w = 10;
+            retangulo.h = 4;
+            retangulo.x = temp_x;
+            retangulo.y = temp_y + 6;
+            SDL_RenderFillRect(renderer,&retangulo);
+
+        }
+
+        if(temp_tipo == 4 || temp_tipo == -4)
+        {
+            retangulo.w = 1;
+            retangulo.h = 1;
+            retangulo.x = temp_x;
+            for (int i = 0; i < 10; ++i)
+            {
+                retangulo.w += 1;
+                retangulo.y = temp_y + i;
+                SDL_RenderFillRect(renderer,&retangulo);
+            }
+
+        }
+
+        if(temp_tipo == 5 || temp_tipo == -5)
+        {
+
+        }
+
+        if(temp_tipo == 6 || temp_tipo == -6)
+        {
+
+        }
+
+        if(temp_tipo == 7 || temp_tipo == -7)
+        {
+
+        }
+
+        if(temp_tipo == 8 || temp_tipo == -8)
+        {
+
+        }
+
+        if(temp_tipo == 9 || temp_tipo == -9)
+        {
+
+        }
     }
     unidades.ResetaContadores();
     unidades.AtualizaUniadades();
 
     SDL_RenderPresent(renderer);
 
+}
+
+Game::Game()
+{
+    name = "GAME";
+    window_is_open = false;
+    window = NULL;
+    renderer = NULL;
+    width = 0;
+    height = 0;
 }
 
 

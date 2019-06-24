@@ -1,40 +1,32 @@
 #include <bits/stdc++.h>
 #include <SDL2/SDL.h>
 
+
+/*
+serao usados inteiros para os diferentes tipos de unidades
+valores negativos correspondem a unidades inimigas
+recurso 0 recurso
+soldado 1 quadradinho
+arqueiro 2	retangulo
+cavaleiro 3	_|_
+coletor 4 triangulo
+quartel 5
+campo de arco 6
+estabulo 7
+escavadeira 8
+base 9
+*/
 class Unidades
 {
-private:
-	enum tipo_unidade
-	{
-		SOLDADO,
-		SOLDADO_INIMIGO,
-		ARQUEIRO,
-		ARQUEIRO_INIMIGO,
-		CAVALEIRO,
-		CAVALEIRO_INIMIGO,
-		COLETOR,
-		COLETOR_INIMIGO,
-		QUARTEL,
-		QUARTEL_INIMIGO,
-		CAMPO_DE_ARCO,
-		CAMPO_DE_ARCO_INIMIGO,
-		ESTABULO,
-		ESTABULO_INIMIGO,
-		ESCAVADEIRA,
-		ESCAVADEIRA_INIMIGA,
-		BASE,
-		BASE_INIMIGA
-	};
-
-	std::vector<int> unidades_x, unidades_y;
-	std::vector<tipo_unidade> unidades_tipos;
+	std::vector<int> unidades_x, unidades_y, unidades_tipos;
 	int n_unidades, contador_RetornaUnidades;
 
 	//propriedades globais das unidades 
 	int velocidade_soldado, velocidade_arqueiro, velocidade_cavaleiro, velocidade_coletor;
-	int vida_quartel, vida_estabulo, vida_campo_de_arco, vida_escavadeira, vida_base;
 
 public:
+	
+	int vida_quartel, vida_estabulo, vida_campo_de_arco, vida_escavadeira, vida_base;
 
 	Unidades();
 
@@ -42,7 +34,7 @@ public:
 
 	//unico tipo de unidade q pode ser criada pelo jogador sao QUARTEL, ESTABULO, ESCAVADEIRA e BASES
 	//retorna falso quando ja existe uma unidade na posicao
-	bool CriaUnidade(int x, int y, tipo_unidade tipo);
+	bool CriaUnidade(int x, int y, int tipo);
 	bool CriaUnidade(int x, int y);
 
 	//retorna falso quando nao existe uma unidade na posicao
@@ -53,13 +45,13 @@ public:
 
 	//cada vez chamada atribui as coodenadas e tipo uma unidade nao repetida 
 	//retorna falso quando percorreu rodas unidades
-	bool RetornaUnidades(int *x, int *y, tipo_unidade *tipo);
+	bool RetornaUnidades(int *x, int *y, int *tipo);
 	bool RetornaUnidades(int *x, int *y);
 
 	//cada vez chamda atribui as cordenadas do tipo de unidade pedida
 	//retorna falso quando ja percorreu todas as unidades do tipo pedido
 	//volta ao começo da lista quando outro tipo de unidade é pedido
-	bool RetornaUnidadesPorTipo(tipo_unidade tipo,int *x, int *y);
+	bool RetornaUnidadesPorTipo(int tipo,int *x, int *y);
 
 	//executa as interaçoes entre as unidades e reseta RetornaUnidades e RetornaUnidadesPorTipo
 	void AtualizaUniadades();
@@ -85,7 +77,14 @@ private:
 		LEFT_CLICK,
 		RIGHT_CLICK,
 		NUM_1,
-		NUM_2
+		NUM_2,
+		NUM_3,
+		NUM_4,
+		NUM_5,
+		NUM_6,
+		NUM_7,
+		NUM_8,
+		NUM_9
 	};
 	bool quit_requested;
 	SDL_Renderer *renderer;
@@ -96,6 +95,7 @@ private:
 	int x, y, mouse_x, mouse_y;
 	int game_speed;
 	Unidades unidades;
+	int temp_flag;
 	
 public:
 	State(SDL_Window *window, SDL_Renderer *renderer, int width, int height);
@@ -122,16 +122,13 @@ class Game
 {
 private:
     int width, height;
-    std::string name = "GAME";
-    bool window_is_open = false;
-    SDL_Window *window = NULL;
-    SDL_Renderer *renderer = NULL;
+    std::string name;
+    bool window_is_open;
+    SDL_Window *window;
+    SDL_Renderer *renderer;
 
 public:
-	Game()
-	{
-
-	}
+	Game();
 
     ~Game()
     {
