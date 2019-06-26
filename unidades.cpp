@@ -15,7 +15,7 @@ Unidades::Unidades()
     vida_base=100;
     cooldown_soldado = 5;
     cooldown_aqrqueiro = 60;
-    cooldown_cavaleiro = 1;   
+    cooldown_cavaleiro = 1;
     segundo = 0;
     frame = 0;
     srand((unsigned)time(NULL));
@@ -82,6 +82,16 @@ bool Unidades::DestroiUnidade(int x, int y)
         }
     }
     return false;
+}
+
+bool Unidades::DestroiUnidade(int indice)
+{
+    unidades_x.erase(unidades_x.begin()+indice);
+    unidades_y.erase(unidades_y.begin()+indice);
+    unidades_tipos.erase(unidades_tipos.begin()+indice);
+    n_unidades--;
+    return true;
+
 }
 
 bool Unidades::MoveUnidade(int indice, int destino_x, int destino_y)
@@ -246,6 +256,34 @@ bool Unidades::MoveUnidade(int indice, int destino_x, int destino_y)
     }
 }
 
+int Unidades::InimigoMaisProximo(int indice)
+{
+    int distancia=2000, temp_distancia, temp_indice;
+    for (int j = 0; j < n_unidades; j++)
+    {
+        if((indice != j) && ((unidades_tipos[indice]>0 && unidades_tipos[j]<0)||(unidades_tipos[indice]<0 && unidades_tipos[j]>0)))
+        {
+            temp_distancia = unidades_x[indice] + unidades_y[indice] - unidades_x[j] - unidades_y[j];
+            if(temp_distancia<0)
+            {
+                temp_distancia = temp_distancia * (-1);
+            }
+
+            if(temp_distancia < distancia)
+            {
+                distancia = temp_distancia;
+                temp_indice = j;
+            }
+        }
+    }
+
+    if(distancia != 2000)
+    {
+        return temp_indice;
+    }
+    return -1;
+}
+
 bool Unidades::RetornaUnidades(int *x, int *y, int *tipo)
 {
     if(n_unidades==0)
@@ -289,62 +327,12 @@ void Unidades::AtualizaUniadades()
 
     for (int i = 0; i < n_unidades; i++)
     {
-        int distancia=2000, temp_distancia, temp_indice;
-        if(unidades_tipos[i] <= 4 && unidades_tipos[i] >= -4 && unidades_tipos[i] != 0)
+        int j = InimigoMaisProximo(i);
+
+        if(j !=-1 && (unidades_tipos[i] <= 4 && unidades_tipos[i] >= -4 && unidades_tipos[i] != 0))
         {
-            for (int j = 0; j < n_unidades; j++)
-            {
-                if((i != j) && ((unidades_tipos[i]>0 && unidades_tipos[j]<0)||(unidades_tipos[i]<0 && unidades_tipos[j]>0)))
-                {
-                    temp_distancia = unidades_x[i] + unidades_y[i] - unidades_x[j] - unidades_y[j];
-                    if(temp_distancia<0)
-                    {
-                        temp_distancia = temp_distancia * (-1);
-                    }
-                    if(temp_distancia < distancia)
-                    {
-                        distancia = temp_distancia;
-                        temp_indice = j;
-                    }
-                }
-            }
-
-            if(distancia != 2000)
-            {
-                MoveUnidade(i,unidades_x[temp_indice],unidades_y[temp_indice]);
-                // move unidades
-                /*
-                if(unidades_x[i]<unidades_x[temp_indice])
-                {
-                    unidades_x[i]++;
-                }
-
-                if(unidades_x[i]>unidades_x[temp_indice])
-                {
-                    unidades_x[i]--;
-                }
-
-                if(unidades_x[i]==unidades_x[temp_indice])
-                {
-                    unidades_x[i]+= ((int) rand()%3)-1;
-                }
-
-                if(unidades_y[i]<unidades_y[temp_indice])
-                {
-                    unidades_y[i]++;
-                }
-
-                if(unidades_y[i]>unidades_y[temp_indice])
-                {
-                    unidades_y[i]--;
-                }
-
-                if(unidades_y[i]==unidades_y[temp_indice])
-                {
-                    unidades_y[i]+= ((int) rand()%3)-1;
-                }
-            */
-            }
+            MoveUnidade(i,unidades_x[j],unidades_y[j]);
         }
+
     }
 }

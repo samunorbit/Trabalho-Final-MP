@@ -40,10 +40,14 @@ public:
 
 	//retorna falso quando nao existe uma unidade na posicao
 	bool DestroiUnidade(int x, int y);
+	bool DestroiUnidade(int indice); 
 
 	//retorna falso nao existe uma unidade na posicao ou existe uma unidade na posicao que a unidade foi movida
 	bool MoveUnidade(int x, int y, int novo_x, int novo_y);
 	bool MoveUnidade(int indice, int destino_x, int destino_y);
+
+	//retorna o indice da unidade inimiga ou -1 de n houver unidades inimigas
+	int InimigoMaisProximo(int indice);
 
 	//cada vez chamada atribui as coodenadas e tipo uma unidade nao repetida 
 	//retorna falso quando percorreu rodas unidades
