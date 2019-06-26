@@ -269,7 +269,31 @@ void State::Render()
         }
 
         if(temp_tipo == 5 || temp_tipo == -5)
-        {
+        {   
+            retangulo.w = 18;
+            retangulo.h = 18;
+            retangulo.x = temp_x;
+            retangulo.y = temp_y;
+            SDL_RenderFillRect(renderer,&retangulo);
+            retangulo.w = 10;
+            retangulo.h = 10;
+            retangulo.x = temp_x + 4;
+            retangulo.y = temp_y + 4;
+            SDL_SetRenderDrawColor(renderer,255,0,255,255);
+            SDL_RenderFillRect(renderer,&retangulo);
+            if(temp_tipo > 0)
+            {
+                SDL_SetRenderDrawColor(renderer,0,0,0,255);
+            }
+            else
+            {
+                SDL_SetRenderDrawColor(renderer,255,255,255,255);
+            }
+            retangulo.w = 6;
+            retangulo.h = 6;
+            retangulo.x = temp_x + 6;
+            retangulo.y = temp_y + 6;
+            SDL_RenderFillRect(renderer,&retangulo);
 
         }
 

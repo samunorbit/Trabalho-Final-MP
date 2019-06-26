@@ -91,7 +91,18 @@ bool Unidades::DestroiUnidade(int indice)
     unidades_tipos.erase(unidades_tipos.begin()+indice);
     n_unidades--;
     return true;
+}
 
+int Unidades::VerificaCoodenada(int x, int y)
+{
+    for (int i = 0; i < n_unidades; i++)
+    {
+        if(unidades_x[i] == x && unidades_y[i] == y)
+        {
+            return unidades_tipos[i];
+        }
+    }
+    return -1;
 }
 
 bool Unidades::MoveUnidade(int indice, int destino_x, int destino_y)
@@ -107,13 +118,19 @@ bool Unidades::MoveUnidade(int indice, int destino_x, int destino_y)
 
         if(relative_y > 0)
         {
-            unidades_y[indice]++;
+            if(VerificaCoodenada(unidades_x[indice],unidades_y[indice]+1)==-1)
+            {
+                unidades_y[indice]++;
+            }
             return true;
         }
 
         if (relative_y < 0)
         {
-            unidades_y[indice]--;
+            if(VerificaCoodenada(unidades_x[indice],unidades_y[indice]-1)==-1)
+            {
+                unidades_y[indice]--;
+            }
             return true;
         }
     }
@@ -122,7 +139,11 @@ bool Unidades::MoveUnidade(int indice, int destino_x, int destino_y)
     {
         if(relative_y == 0)
         {
-            unidades_x[indice]++;
+
+            if(VerificaCoodenada(unidades_x[indice]+1,unidades_y[indice])==-1)
+            {
+                unidades_x[indice]++;
+            }
             return true;
         }
 
@@ -130,26 +151,44 @@ bool Unidades::MoveUnidade(int indice, int destino_x, int destino_y)
         {
             if(relative_x > relative_y)
             {
-                unidades_x[indice]++;
+                if(VerificaCoodenada(unidades_x[indice]+1,unidades_y[indice])==-1)
+                {
+                    unidades_x[indice]++;
+                }
                 if((int) rand()%2)
                 {
-                    unidades_y[indice]++;
+                    if(VerificaCoodenada(unidades_x[indice],unidades_y[indice]+1)==-1)
+                    {
+                        unidades_y[indice]++;
+                    }
                 }
                 return true;
             }
 
             if(relative_x == relative_y)
             {
-                unidades_x[indice]++;
-                unidades_y[indice]++;
+                if(VerificaCoodenada(unidades_x[indice]+1,unidades_y[indice])==-1)
+                {
+                    unidades_x[indice]++;
+                }
+                if(VerificaCoodenada(unidades_x[indice],unidades_y[indice]+1)==-1)
+                {
+                    unidades_y[indice]++;
+                }
             }
 
             if(relative_x < relative_y)
             {
-                unidades_y[indice]++;
+                if(VerificaCoodenada(unidades_x[indice],unidades_y[indice]+1)==-1)
+                {
+                    unidades_y[indice]++;
+                }
                 if((int) rand()%2)
                 {
-                    unidades_x[indice]++;
+                    if(VerificaCoodenada(unidades_x[indice]+1,unidades_y[indice])==-1)
+                    {
+                        unidades_x[indice]++;
+                    }
                 }
                 return true;
             }
@@ -160,26 +199,44 @@ bool Unidades::MoveUnidade(int indice, int destino_x, int destino_y)
         {
             if(relative_x > -relative_y)
             {
-                unidades_x[indice]++;
+                if(VerificaCoodenada(unidades_x[indice]+1,unidades_y[indice])==-1)
+                {
+                    unidades_x[indice]++;
+                }
                 if((int) rand()%2)
                 {
-                    unidades_y[indice]--;
+                    if(VerificaCoodenada(unidades_x[indice],unidades_y[indice]-1)==-1)
+                    {
+                        unidades_y[indice]--;
+                    }
                 }
                 return true;
             }
 
             if(relative_x == -relative_y)
             {
-                unidades_x[indice]++;
-                unidades_y[indice]--;
+                if(VerificaCoodenada(unidades_x[indice]+1,unidades_y[indice])==-1)
+                {
+                    unidades_x[indice]++;
+                }
+                if(VerificaCoodenada(unidades_x[indice],unidades_y[indice]-1)==-1)
+                {
+                    unidades_y[indice]--;
+                }
             }
 
             if(relative_x < -relative_y)
             {
-                unidades_y[indice]--;
+                if(VerificaCoodenada(unidades_x[indice],unidades_y[indice]-1)==-1)
+                {
+                    unidades_y[indice]--;
+                }
                 if((int) rand()%2)
                 {
-                    unidades_x[indice]++;
+                    if(VerificaCoodenada(unidades_x[indice]+1,unidades_y[indice])==-1)
+                    {
+                        unidades_x[indice]++;
+                    }
                 }
                 return true;
             }
@@ -190,7 +247,10 @@ bool Unidades::MoveUnidade(int indice, int destino_x, int destino_y)
     {
         if(relative_y == 0)
         {
-            unidades_x[indice]--;
+            if(VerificaCoodenada(unidades_x[indice]-1,unidades_y[indice])==-1)
+            {
+                unidades_x[indice]--;
+            }
             return true;
         }
 
@@ -198,26 +258,44 @@ bool Unidades::MoveUnidade(int indice, int destino_x, int destino_y)
         {
             if(-relative_x > relative_y)
             {
-                unidades_x[indice]--;
+                if(VerificaCoodenada(unidades_x[indice]-1,unidades_y[indice])==-1)
+                {
+                    unidades_x[indice]--;
+                }
                 if((int) rand()%2)
                 {
-                    unidades_y[indice]++;
+                    if(VerificaCoodenada(unidades_x[indice],unidades_y[indice]+1)==-1)
+                    {
+                        unidades_y[indice]++;
+                    }
                 }
                 return true;
             }
 
             if(-relative_x == relative_y)
             {
-                unidades_x[indice]--;
-                unidades_y[indice]++;
+                if(VerificaCoodenada(unidades_x[indice]-1,unidades_y[indice])==-1)
+                {
+                    unidades_x[indice]--;
+                }
+                if(VerificaCoodenada(unidades_x[indice],unidades_y[indice]+1)==-1)
+                {
+                    unidades_y[indice]++;
+                }
             }
 
             if(-relative_x < relative_y)
             {
-                unidades_y[indice]++;
+                if(VerificaCoodenada(unidades_x[indice],unidades_y[indice]+1)==-1)
+                {
+                    unidades_y[indice]++;
+                }
                 if((int) rand()%2)
                 {
-                    unidades_x[indice]--;
+                    if(VerificaCoodenada(unidades_x[indice]-1,unidades_y[indice])==-1)
+                    {
+                        unidades_x[indice]--;
+                    }
                 }
                 return true;
             }
@@ -228,26 +306,44 @@ bool Unidades::MoveUnidade(int indice, int destino_x, int destino_y)
         {
             if(-relative_x > -relative_y)
             {
-                unidades_x[indice]--;
+                if(VerificaCoodenada(unidades_x[indice]-1,unidades_y[indice])==-1)
+                {
+                    unidades_x[indice]--;
+                }
                 if((int) rand()%2)
                 {
-                    unidades_y[indice]--;
+                    if(VerificaCoodenada(unidades_x[indice],unidades_y[indice]-1)==-1)
+                    {
+                        unidades_y[indice]--;
+                    }
                 }
                 return true;
             }
 
             if(relative_x == relative_y)
             {
-                unidades_x[indice]--;
-                unidades_y[indice]--;
+                if(VerificaCoodenada(unidades_x[indice]-1,unidades_y[indice])==-1)
+                {
+                    unidades_x[indice]--;
+                }
+                if(VerificaCoodenada(unidades_x[indice],unidades_y[indice]-1)==-1)
+                {
+                    unidades_y[indice]--;
+                }
             }
 
             if(-relative_x < -relative_y)
             {
-                unidades_y[indice]--;
+                if(VerificaCoodenada(unidades_x[indice],unidades_y[indice]-1)==-1)
+                {
+                    unidades_y[indice]--;
+                }
                 if((int) rand()%2)
                 {
-                    unidades_x[indice]--;
+                    if(VerificaCoodenada(unidades_x[indice]-1,unidades_y[indice])==-1)
+                    {
+                        unidades_x[indice]--;
+                    }
                 }
                 return true;
             }
@@ -257,6 +353,43 @@ bool Unidades::MoveUnidade(int indice, int destino_x, int destino_y)
 }
 
 int Unidades::InimigoMaisProximo(int indice)
+{
+    int distancia=2000,temp_distancia ,temp_distancia_x,temp_distancia_y, temp_indice;
+    for (int j = 0; j < n_unidades; j++)
+    {
+        if((indice != j) && ((unidades_tipos[indice]>0 && unidades_tipos[j]<0) || (unidades_tipos[indice]<0 && unidades_tipos[j]>0)))
+        {
+            temp_distancia_x = unidades_x[indice] - unidades_x[j] ;
+
+            if(temp_distancia_x<0)
+            {
+                temp_distancia_x = temp_distancia_x * (-1);
+            }
+
+            temp_distancia_y = unidades_y[indice] - unidades_y[j];
+
+            if(temp_distancia_y<0)
+            {
+                temp_distancia_y = temp_distancia_y * (-1);
+            }
+            temp_distancia = temp_distancia_x + temp_distancia_y;
+
+            if(temp_distancia < distancia)
+            {
+                distancia = temp_distancia;
+                temp_indice = j;
+            }
+        }
+    }
+
+    if(distancia != 2000)
+    {
+        return temp_indice;
+    }
+    return -1;
+}
+
+int Unidades::InimigoMaisProximo(int indice, int *dist)
 {
     int distancia=2000, temp_distancia, temp_indice;
     for (int j = 0; j < n_unidades; j++)
@@ -279,6 +412,7 @@ int Unidades::InimigoMaisProximo(int indice)
 
     if(distancia != 2000)
     {
+        *dist = distancia;
         return temp_indice;
     }
     return -1;
@@ -318,6 +452,7 @@ bool Unidades::RetornaUnidades(int *x, int *y)
 void Unidades::AtualizaUniadades()
 {
     //Aqui vai ta toda logica do jogo
+    int temp_x,temp_y;
     frame++;
     if(frame == 60)
     {
@@ -329,9 +464,21 @@ void Unidades::AtualizaUniadades()
     {
         int j = InimigoMaisProximo(i);
 
+        if(unidades_tipos[i]==5||unidades_tipos[i]==-5)
+        {
+            CriaUnidade(unidades_x[i]-1,unidades_y[i],unidades_tipos[i]/5);
+        }
+
         if(j !=-1 && (unidades_tipos[i] <= 4 && unidades_tipos[i] >= -4 && unidades_tipos[i] != 0))
         {
             MoveUnidade(i,unidades_x[j],unidades_y[j]);
+            temp_x = unidades_x[i] - unidades_x[j];
+            temp_y = unidades_y[i] - unidades_y[j];
+            if(temp_x < 2 && temp_x > -2 && temp_y < 2 && temp_y > -2)
+            {
+                DestroiUnidade(i);
+                DestroiUnidade(j);
+            }
         }
 
     }
