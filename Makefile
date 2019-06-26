@@ -1,4 +1,4 @@
-OBJS = main.cpp game.cpp
+OBJS = main.cpp game.cpp unidades.cpp
 
 OBJ_NAME = game
 
