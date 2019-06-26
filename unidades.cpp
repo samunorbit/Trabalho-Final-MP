@@ -452,7 +452,7 @@ bool Unidades::RetornaUnidades(int *x, int *y)
 void Unidades::AtualizaUniadades()
 {
     //Aqui vai ta toda logica do jogo
-    int temp_x,temp_y;
+    int temp_x,temp_y,m,n;
     frame++;
     if(frame == 60)
     {
@@ -466,7 +466,24 @@ void Unidades::AtualizaUniadades()
 
         if(unidades_tipos[i]==5||unidades_tipos[i]==-5)
         {
-            CriaUnidade(unidades_x[i]-1,unidades_y[i],unidades_tipos[i]/5);
+        	if((int) rand()%2)
+        	{
+        		m=1;
+        	}
+        	else
+        	{
+        		m=-1;
+        	}
+        	if((int) rand()%2)
+        	{
+        		n=1;
+        	}
+        	else
+        	{
+        		n=-1;
+        	}
+        	CriaUnidade(unidades_x[i]+m,unidades_y[i]+n,unidades_tipos[i]/5);
+            
         }
 
         if(j !=-1 && (unidades_tipos[i] <= 4 && unidades_tipos[i] >= -4 && unidades_tipos[i] != 0))
